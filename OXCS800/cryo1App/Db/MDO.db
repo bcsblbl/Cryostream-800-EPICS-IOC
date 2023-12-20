@@ -1,0 +1,977 @@
+#Credits:
+###
+#Adapted from https://github.com/djvine/OxfordCryo_CryoStream800/blob/master/oxcryo.proto (which was also adapted from the driver of James OHea (DLS))
+
+#This version was expanded and improved by:
+
+# Berkeley Center for Structural Biology
+# https://bcsb.als.lbl.gov/wordpress/
+# John Taylor     - Berkeley National Laboratory ( jrtaylor@lbl.gov )
+# Gabriel Gazolla - Berkeley National Laboratory ( gabrielgazolla@lbl.gov )
+
+### Important Considerations
+
+# - This proto file refers to a Cryostream Model 800 ( https://www.oxcryo.com/ ).
+# - An UDP packet was intercepted to create this list.
+# - The comments on the right refers to ID, description and example value.
+# - More information can be found at:
+# -    https://connect.oxcryo.com/ethernetcomms/status.html
+# -    https://connect.oxcryo.com/ethernetcomms/OxcryoProperties.xml
+# -    https://connect.oxcryo.com/ethernetcomms/index.html
+
+record(ai, "$(P)$(Q):STATUS") {
+  field(DTYP, "stream")
+  field(INP, "@MDO.proto read($(P)$(Q)) $(PORT) $(A)")
+  field(SCAN, "I/O Intr")
+
+}
+
+record(mbbi, "$(P)$(Q):TYPE")
+{
+  field(DESC, "Status Packet Type")
+  field(DTYP, "Raw Soft Channel")
+  field(VAL,  "1")
+  field(ONVL, "1")
+  field(TWVL, "2")
+  field(ONST, "928B Packets")
+  field(TWST, "Extended Packets")
+  field(PINI, "YES")
+}
+
+record(ai, "$(P)$(Q):DATALENGTH") {
+  field(DESC, "Status packet length")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1000 Device (1)
+
+record(ai, "$(P)$(Q):DEVICETYPE") {
+  field(DESC, "Cryo stream device type")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1001 Hardware (12)
+
+record(ai, "$(P)$(Q):DEVICESUBTYPE") {
+  field(DESC, "Cryo stream device sub type")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1002 Min temp (8000)
+# 8000 means 80K
+
+record(ai, "$(P)$(Q):DEVICEMINTEMP") {
+  field(DESC, "Device minimum temp")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1003 Max temp (40000)
+# 40000 means 400K
+
+record(ai, "$(P)$(Q):DEVICEMAXTEMP") {
+  field(DESC, "Device maximum temp")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1004 Control firmware (153)
+
+record(ai, "$(P)$(Q):VER") {
+  field(DESC, "Software Version")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1028 Controller number (1213)
+
+record(ai, "$(P)$(Q):CTRLNUM") {
+  field(DESC, "Controller Number")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1029 Coldhead number (3221)
+
+record(ai, "$(P)$(Q):COLDHEAD") {
+  field(DESC, "Coldhead number")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1045 Live heater 2 (99)
+# We still do not know the meaning
+# However we implemented for testing purposes
+
+record(ai, "$(P)$(Q):LIVEHEATER2") {
+  field(DESC, "Live Heater2")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "1")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+
+# Param ID 1050 Set temp (10000)
+# Reads the temperature that was set
+# In this case 10000 means 100K
+
+record(ai, "$(P)$(Q):SETTEMPERATURE") {
+  field(DESC, "Set Point")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1051 Sample temp (9999)
+# Reads the current/actual temperature of the sample
+# In this case 9999 means 99.99K
+
+record(ai, "$(P)$(Q):CURRENTTEMPERATURE") {
+  field(DESC, "Current Temperature")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1052 Temp error (1)
+# Measures the difference between Set Temp (1050)
+# and the actual temperature of the sample (1051)
+
+record(ai, "$(P)$(Q):ERROR") {
+  field(DESC, "Error")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1053 Run mode (3)
+# Useful to understand in which state
+# the machine is currently at
+
+record(mbbi, "$(P)$(Q):RUNMODE") {
+  field(DESC, "Run Mode")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(ZRVL, "0")
+  field(ONVL, "1")
+  field(TWVL, "2")
+  field(THVL, "3")
+  field(FRVL, "4")
+  field(FVVL, "5")
+  field(SXVL, "6")
+  field(ZRST, "Startup")
+  field(ONST, "Startup Fail")
+  field(TWST, "Startup OK")
+  field(THST, "Run")
+  field(FRST, "Setup")
+  field(FVST, "Shutdown OK")
+  field(SXST, "Shutdown Fail")
+}
+
+# param ID 1054 Phase ID (3)
+# Useful to understand in which phase
+# the machine is currently is
+
+record(mbbi, "$(P)$(Q):PHASE") {
+  field(DESC, "Phase ID")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(ZRVL, "0")
+  field(ONVL, "1")
+  field(TWVL, "2")
+  field(THVL, "3")
+  field(FRVL, "4")
+  field(FVVL, "5")
+  field(SXVL, "6")
+  field(SVVL, "7")
+  field(EIVL, "8")
+  field(NIVL, "9")
+  field(TEVL, "10")
+  field(ZRST, "Ramp")
+  field(ONST, "Cool")
+  field(TWST, "Plat")
+  field(THST, "Hold")
+  field(FRST, "End")
+  field(FVST, "Purge")
+  field(SXST, "Delete Phase")
+  field(SVST, "Load Program")
+  field(EIST, "Save Program")
+  field(NIST, "Soak")
+  field(TEST, "Wait")
+}
+
+
+# Param ID 1055 Ramp rate (0)
+# The speed that the device is
+# changing the temperature
+
+record(ai, "$(P)$(Q):RAMPRATE") {
+  field(DESC, "Ramp Rate")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.00547798886091")
+  field(EOFF, "1")
+  field(PREC, "2")
+  field(EGU, "K/hour")
+}
+
+# Param ID 1056 Target temp (10000)
+# Reads the temperature that we would like to reach
+# In this case 10000 means 100K
+
+record(ai, "$(P)$(Q):TARGETTEMP") {
+  field(DESC, "Target Temperature")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1057 Evap temp (7827)
+
+record(ai, "$(P)$(Q):EVAPTEMP") {
+  field(DESC, "Evap Temperature")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1058 Suct temp (28635)
+
+record(ai, "$(P)$(Q):SUCTTEMP") {
+  field(DESC, "Suct Temperature")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 1059 Phase time remaining (0)
+
+record(ai, "$(P)$(Q):REMAINING") {
+  field(DESC, "Time Remaining in Phase")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "min")
+}
+
+# Param ID 1060 Gas flow (65534)
+
+record(ai, "$(P)$(Q):GASFLOW") {
+  field(DESC, "Gas Flow")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.1")
+  field(EOFF, "0")
+  field(PREC, "1")
+  field(EGU, "l/min")
+}
+
+# Param ID 1061 Gas heat (5)
+
+record(ai, "$(P)$(Q):GASHEAT") {
+  field(DESC, "Gas Heater")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "%")
+}
+
+# Param ID 1062 Evap heat (47)
+
+record(ai, "$(P)$(Q):EVAPHEAT") {
+  field(DESC, "Evap Heater")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "%")
+}
+
+# Param ID 1063 Average suct heat (9)
+
+record(ai, "$(P)$(Q):SUCTHEAT") {
+  field(DESC, "Suct Heater")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "%")
+}
+
+# Param ID 1064 Back pressure (65534)
+
+record(ai, "$(P)$(Q):BACKPRESS") {
+  field(DESC, "Back Pressure")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "bar")
+}
+
+# Param ID 1066 Run time (14460)
+# For how long the machine is running in minutes
+
+record(ai, "$(P)$(Q):RUNTIME") {
+  field(DESC, "Pump Uptime")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "min")
+}
+
+# Param ID 1067 Evap shift (27)
+
+record(ai, "$(P)$(Q):EVAPADJUST") {
+  field(DESC, "Evap Vacuum Compensation")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1068 Turbo mode (0)
+# If 0 means turbo is not activated
+# If 1 means turbo is activated
+
+record(ai, "$(P)$(Q):TURBOMODE") {
+  field(DESC, "Turbo Mode Readback")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1109 - FC Device type (673)
+# Unknown details
+
+record(ai, "$(P)$(Q):FCDEVICETYPE") {
+  field(DESC, "AF Serial")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 1203
+# LN Levels
+record(ai, "$(P)$(Q):LEVEL") {
+  field(DESC, "Liquid Nitrogen Level")
+  field(DTYP, "Raw Soft Channel")
+  field(EGU,  "%")
+  field(PINI, "YES")
+}
+
+# Param ID 1209 AF Mode (Autofill Mode)
+# Liquid Nitrogen Auto fill mode
+# If 0 means Autofill Mode is Off.
+# If 1 means Autofill Mode is On.
+
+record(ai, "$(P)$(Q):GETAFMODE") {
+  field(DESC, "Auto Fill Mode Readback")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 2010
+record(ai, "$(P)$(Q):COLDHEADTEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2011
+record(ai, "$(P)$(Q):SHIELDTEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2012
+record(ai, "$(P)$(Q):VACGAUGE") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2013
+record(ai, "$(P)$(Q):NOZZLETEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2014
+record(ai, "$(P)$(Q):SAMPLEHEAT") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2015
+record(ai, "$(P)$(Q):COLDHEADHEAT") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2016
+record(ai, "$(P)$(Q):SHIELDHEAT") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2017
+record(ai, "$(P)$(Q):NOZZLEHEAT") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2019
+record(ai, "$(P)$(Q):ERROR") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2030
+record(ai, "$(P)$(Q):SAMHOLDTEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2031
+record(ai, "$(P)$(Q):CRYOSTATTEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2032
+record(ai, "$(P)$(Q):SAMHOLDPRES") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2034
+record(ai, "$(P)$(Q):ELAPSED") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2035
+record(ai, "$(P)$(Q):SUCTSETTEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2036
+record(ai, "$(P)$(Q):NOZZLESETTEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2041
+record(ai, "$(P)$(Q):COLLARTEMP") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+}
+
+# Param ID 2042
+record(ai, "$(P)$(Q):VACSENSOR") {
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+# Param ID 36178 - Unknown
+# We do not know the meaning, however we
+# created this to be sure that we could parse
+# the full binary packet from the network
+# this is one of the last records
+
+record(ai, "$(P)$(Q):UNK36178") {
+  field(DESC, "Unknown 36178")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+}
+
+################
+### Commands ###
+################
+
+Reference:
+### https://connect.oxcryo.com/ethernetcomms/commands.html
+
+### Commands are sorted by ID.
+
+
+# Command ID 10 - Restart
+# Restart - Moves to Ready Mode
+# Moves Cryostream device to "Ready" mode
+# Being on ready mode does not mean cooling
+# Still need to send COOL command after
+# device is in ready mode.
+
+record(ao, "$(P)$(Q):RESTART") {
+  field(DESC, "Start/Restart program")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto restart($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+
+
+# Command ID ?? - Required for Ramp Command
+# Start of "RAMP RATE" command
+
+record(ao, "$(P)$(Q):RRATE") {
+  field(DESC, "Set Ramp Rate")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "K/hour")
+  field(DRVL, "1")
+  field(DRVH, "360")
+  field(VAL, "360")
+  field(FLNK, "$(P)$(Q):RRATECH")
+}
+
+record(calcout, "$(P)$(Q):RRATECH") {
+  field(CALC, "(A>>8>=C)?A>>8-C:A>>8")
+  field(INPA, "$(P)$(Q):RRATE.RVAL")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):RRATEH.VAL PP")
+  field(FLNK, "$(P)$(Q):RRATECL")
+}
+
+record(ao, "$(P)$(Q):RRATEH") {
+  field(DESC, "Ramp Target Temp Hi byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+record(ao, "$(P)$(Q):RRATEL") {
+  field(DESC, "Ramp Target Temp Lo byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+record(calcout, "$(P)$(Q):RRATECL") {
+  field(CALC, "(A%B>=C)?A%B-B:A%B")
+  field(INPA, "$(P)$(Q):RRATE.RVAL")
+  field(INPB, "256")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):RRATEL.VAL PP")
+
+# End of "RAMP RATE" command
+
+
+
+# Command ID 11 - Ramp
+# Start of "RAMP" command
+
+record(ao, "$(P)$(Q):RAMP") {
+  field(DESC, "Start a ramp")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto ramp($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+record(ao, "$(P)$(Q):RTEMP") {
+  field(DESC, "Ramp Target Temp")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+  field(DRVL, "1.00")
+  field(DRVH, "360.00")
+  field(FLNK, "$(P)$(Q):RTEMPCH")
+}
+
+record(ao, "$(P)$(Q):RTEMPH") {
+  field(DESC, "Ramp Target Temp Hi byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+record(ao, "$(P)$(Q):RTEMPL") {
+  field(DESC, "Ramp Target Temp Lo byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+record(calcout, "$(P)$(Q):RTEMPCH") {
+  field(CALC, "(A>>8>=C)?A>>8-C:A>>8")
+  field(INPA, "$(P)$(Q):RTEMP.RVAL")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):RTEMPH PP")
+  field(FLNK, "$(P)$(Q):RTEMPCL")
+}
+
+record(calcout, "$(P)$(Q):RTEMPCL") {
+  field(CALC, "(A%B>=C)?A%B-B:A%B")
+  field(INPA, "$(P)$(Q):RTEMP.RVAL")
+  field(INPB, "256")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):RTEMPL PP")
+
+
+# End of "RAMP" command
+
+
+
+# Command ID 12 - Plat
+# Start of "PLAT" command
+
+record(ao, "$(P)$(Q):PLAT") {
+  field(DESC, "Start a plat")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto plat($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+record(ao, "$(P)$(Q):PTIME") {
+  field(DESC, "Plat Time")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "min")
+  field(DRVL, "1")
+  field(DRVH, "1440")
+  field(FLNK, "$(P)$(Q):PTIMECH")
+}
+
+record(calcout, "$(P)$(Q):PTIMECH") {
+  field(CALC, "(A>>8>=C)?A>>8-C:A>>8")
+  field(INPA, "$(P)$(Q):PTIME.RVAL")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):PTIMEH.VAL PP")
+  field(FLNK, "$(P)$(Q):PTIMECL")
+}
+
+record(calcout, "$(P)$(Q):PTIMECL") {
+  field(CALC, "(A%B>=C)?A%B-B:A%B")
+  field(INPA, "$(P)$(Q):PTIME.RVAL")
+  field(INPB, "256")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):PTIMEL.VAL PP")
+}
+
+record(ao, "$(P)$(Q):PTIMEL") {
+  field(DESC, "Ramp Target Temp Lo byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+record(ao, "$(P)$(Q):PTIMEH") {
+  field(DESC, "Ramp Target Temp Hi byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+# End of "PLAT" command
+
+
+
+# Command ID 13 - HOLD
+record(ao, "$(P)$(Q):HOLD") {
+  field(DESC, "Start a hold")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto hold($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+# Start of "CTEMP" command
+
+
+# Useful for Command ID 14 - Cool
+# Needs to be set, before COOL command.
+
+record(ao, "$(P)$(Q):CTEMPL") {  
+  field(DESC, "Ramp Target Temp Lo byte")
+  field(DTYP, "Raw Soft Channel")
+} 
+
+record(ao, "$(P)$(Q):CTEMPH") {
+  field(DESC, "Ramp Target Temp Hi byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+record(calcout, "$(P)$(Q):CTEMPCH") {
+  field(CALC, "(A>>8>=C)?A>>8-C:A>>8")
+  field(INPA, "$(P)$(Q):CTEMP.RVAL")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):CTEMPH.VAL PP")
+  field(FLNK, "$(P)$(Q):CTEMPCL")
+}
+
+record(calcout, "$(P)$(Q):CTEMPCL") {
+  field(CALC, "(A%B>=C)?A%B-B:A%B")
+  field(INPA, "$(P)$(Q):CTEMP.RVAL")
+  field(INPB, "256")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):CTEMPL.VAL PP")
+}
+
+record(ao, "$(P)$(Q):CTEMP") {
+  field(DESC, "Cool Temp")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(LINR, "LINEAR")
+  field(ESLO, "0.01")
+  field(EOFF, "0")
+  field(PREC, "2")
+  field(EGU, "K")
+  field(DRVL, "80.00")
+  field(DRVH, "327.67")
+  field(FLNK, "$(P)$(Q):CTEMPCH")
+}
+
+# End of "CTEMP" command
+
+
+
+# Command ID 14 - Cool
+# Should set CTEMP first
+record(ao, "$(P)$(Q):COOL") {
+  field(DESC, "Start a cool")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto cool($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+# Command ID 15 - HOLD
+record(ao, "$(P)$(Q):END") {
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto end($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE") 
+}
+
+# Command ID 16 - PURGE
+record(ao, "$(P)$(Q):PURGE") {
+  field(DESC, "Start a Purge/Warm")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto purge($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+# Command ID 17 - Pause
+record(ao, "$(P)$(Q):PAUSE") {
+  field(DESC, "Pause program")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto pause($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+# Command ID 18 - Resume
+
+record(ao, "$(P)$(Q):RESUME") {
+  field(DESC, "Resume program")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto resume($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+# Command ID 19 - Stop
+# Moves Cryostream device to "Shutdown Mode Without Error"
+
+record(ao, "$(P)$(Q):STOP") {
+  field(DESC, "Stop program")
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto stop($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+
+
+# Command ID 20 - Sets Turbo On
+record(bo, "$(P)$(Q):TURBO") {
+  field(DTYP, "Raw Soft Channel")
+  field(ZNAM, "Off")
+  field(ONAM, "On")
+  field(FLNK, "$(P)$(Q):TURBOCMD")
+  field(RVAL, "0")
+  field(PINI, "YES")
+}
+
+record(ao, "$(P)$(Q):TURBOCMD") {
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto turbo($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+
+
+# Command ID 202 - Sets AutoFill Mode
+# Example 01:
+# caput OXCRYO:CS800:SETAFMODE 1
+# Old : OXCRYO:CS800:SETAFMODE   On
+# New : OXCRYO:CS800:SETAFMODE   On
+# Example 02:
+# caput OXCRYO:CS800:SETAFMODE 0
+# OXCRYO:CS800:SETAFMODE         Off
+# OXCRYO:CS800:SETAFMODE         Off
+# Sometimes command needs to be sent multiple times
+# Due to nature of Cryostream implementation
+
+record(bo, "$(P)$(Q):SETAFMODE") {
+  field(DTYP, "Raw Soft Channel")
+  field(ZNAM, "Off")
+  field(ONAM, "On")
+  field(FLNK, "$(P)$(Q):SETAFMODECMD")
+  field(RVAL, "0")
+  field(PINI, "YES")
+}
+
+# Calls the command itself on the proto file
+record(ao, "$(P)$(Q):SETAFMODECMD") {
+  field(DTYP, "stream")
+  field(OUT, "@MDO.proto setafmode($(P)$(Q)) $(PORTCMD)")
+  field(SDIS, "$(P)$(Q):DISABLE")
+}
+
+
+# Command ID ??? - Useful for Which One?
+
+# Start of "ERATE" commands
+
+record(ao, "$(P)$(Q):ERATE") {
+  field(DESC, "Set End Rate")
+  field(DTYP, "Raw Soft Channel")
+  field(PINI, "YES")
+  field(EGU, "K/hour")
+  field(DRVL, "1")
+  field(VAL, "360")
+  field(DRVH, "360")
+  field(FLNK, "$(P)$(Q):ERATECH")
+}
+
+record(calcout, "$(P)$(Q):ERATECH") {
+  field(CALC, "(A>>8>=C)?A>>8-C:A>>8")
+  field(INPA, "$(P)$(Q):ERATE.RVAL")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):ERATEH.VAL PP")
+  field(FLNK, "$(P)$(Q):ERATECL")
+}
+
+record(calcout, "$(P)$(Q):ERATECL") {
+  field(CALC, "(A%B>=C)?A%B-B:A%B")
+  field(INPA, "$(P)$(Q):ERATE.RVAL")
+  field(INPB, "256")
+  field(INPC, "128")
+  field(OUT, "$(P)$(Q):ERATEL.VAL PP")
+}
+
+record(ao, "$(P)$(Q):ERATEH") {
+  field(DESC, "Ramp Target Temp Hi byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+record(ao, "$(P)$(Q):ERATEL") {
+  field(DESC, "Ramp Target Temp Lo byte")
+  field(DTYP, "Raw Soft Channel")
+}
+
+# End of "ERATE" commands
+
+
+
