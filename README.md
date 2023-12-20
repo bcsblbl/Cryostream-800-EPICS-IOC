@@ -1,7 +1,7 @@
 # Cryostream 800 (EPICS IOC)
 
 ## Overview
-Cryostream 800 (Oxford Cryosystems) Driver for EPICS IOC. This is an EPICS stream device driver for the Oxford CryoSystems 800 Series CryoStream. We also implemented a Cryostream 1000 version, please check our repository.
+Cryostream 800 (Oxford Cryosystems) Driver for EPICS IOC. This is an EPICS stream device driver for the Oxford CryoSystems 800 Series CryoStream. We also implemented a Cryostream 1000 version, please check our [repository](https://github.com/bcsblbl/cryostream-1000-EPICS-IOC).
 
 Official Website: [Oxford Cryosystems](https://www.oxcryo.com/)
 
